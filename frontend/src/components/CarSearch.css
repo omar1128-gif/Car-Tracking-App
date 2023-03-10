@@ -1,0 +1,12 @@
+.car-search-input {
+    padding: 12px 12px 12px 45px;
+    border-radius: 10px;
+    border: 0.5px solid #e9e8e8;
+    background-image: url("../assets/search.svg");
+    background-repeat: no-repeat;
+    background-position: 20px center;
+    background-size: 1.1em;
+    font-size: 1.1em;
+    outline: none;
+    margin-bottom: 20px;
+}
