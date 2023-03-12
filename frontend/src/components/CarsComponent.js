@@ -30,11 +30,11 @@ const CarsComponent = ({
                       .includes(searchTerm.toLowerCase())
               );
 
-    useEffect(() => {
-        trackedPN
-            ? console.log("Tracked car is set to ", trackedPN)
-            : console.log("No car is being tracked right now.");
-    }, [trackedPN]);
+    // useEffect(() => {
+    //     trackedPN
+    //         ? console.log("Tracked car is set to ", trackedPN)
+    //         : console.log("No car is being tracked right now.");
+    // }, [trackedPN]);
 
     useEffect(() => {
         socket.on("send-updated-car", (updatedCar) => {
@@ -61,14 +61,10 @@ const CarsComponent = ({
                         lng: updatedCar.lastLng,
                     });
                     setZoom(14);
-                } else {
-                    // console.log("Nothing changed.");
                 }
-            } else {
-                console.log("Something went wrong!");
             }
         });
-    }, [socket]);
+    }, [carsRef, setCars, setCenter, setZoom, socket]);
 
     return (
         <div className="cars-component">

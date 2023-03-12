@@ -23,6 +23,7 @@ const Main = ({ socket }) => {
         _setCenter(position);
     };
 
+    //on first render fetch cars from server
     useEffect(() => {
         const getAllCars = async () => {
             const res = await getCars();
