@@ -8,10 +8,6 @@ const Readings = sequelize.define("Readings", {
         autoIncrement: true,
         primaryKey: true,
     },
-    plateNumber: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
     lat: {
         type: Sequelize.DOUBLE,
         defaultValue: null,

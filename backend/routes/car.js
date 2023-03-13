@@ -10,7 +10,7 @@ router.get("/cars", carController.getCars);
 
 router.get("/cars/:carPN", carController.getCar);
 
-router.patch("/coordinates/:carPN", carController.updateCoordinates);
+router.post("/coordinates/:carPN", carController.updateCoordinates);
 
 router.delete("/cars/:carPN", carController.deleteCar);
 

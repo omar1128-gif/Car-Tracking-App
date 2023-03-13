@@ -51,7 +51,7 @@ io.on("connection", (socket) => {
 app.use(carRoutes);
 
 sequelize
-    .sync({})
+    .sync()
     .then(() => {
         httpServer.listen(PORT, () => {
             console.log(`Server is up and running on port ${[PORT]}`);

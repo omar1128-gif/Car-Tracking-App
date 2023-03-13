@@ -1,30 +1,20 @@
 const Sequelize = require("sequelize");
 
 const sequelize = require("../utils/db");
+const Readings = require("./readings");
 
 const Car = sequelize.define("Car", {
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
     plateNumber: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
-    },
-    lastLat: {
-        type: Sequelize.DOUBLE,
-        defaultValue: null,
-    },
-    lastLng: {
-        type: Sequelize.DOUBLE,
-        defaultValue: null,
-    },
-    lastSpeed: {
-        type: Sequelize.INTEGER,
-        defaultValue: null,
+        primaryKey: true,
     },
 });
 
+Car.hasMany(Readings, {
+    as: "readings",
+    foreignKey: "plateNumber",
+    onDelete: "CASCADE",
+});
+Readings.belongsTo(Car, { foreignKey: "plateNumber" });
 module.exports = Car;

@@ -5,14 +5,32 @@ const sequelize = require("../utils/db");
 exports.getCar = async (req, res) => {
     const car = await Car.findOne({
         where: { plateNumber: req.params.carPN },
+        include: {
+            model: Readings,
+            as: "readings",
+            attributes: ["lat", "lng", "speed", "createdAt"],
+            order: [["createdAt", "DESC"]],
+            limit: 1,
+        },
     });
+
     if (!car) {
         return res.status(404).json({
             message: "Car not found. Check if the plate number is correct",
         });
     }
+    const { plateNumber, readings } = car;
 
-    res.status(200).json({ sucess: true, car });
+    res.status(200).json({
+        sucess: true,
+        car: {
+            plateNumber,
+            lastLat: readings.length === 0 ? null : readings[0].lat,
+            lastLng: readings.length === 0 ? null : readings[0].lng,
+            lastSpeed: readings.length === 0 ? null : readings[0].speed,
+            lastUpdated: readings.length === 0 ? null : readings[0].createdAt,
+        },
+    });
 };
 
 exports.addCar = async (req, res) => {
@@ -41,31 +59,44 @@ exports.updateCoordinates = async (req, res) => {
             message: "Car not found. Check if the plate number is correct",
         });
 
-    // we can use validators but this is for simplicity
-    // update car current stats
-    car.set({
-        lastLat: lat,
-        lastLng: lng,
-        lastSpeed: Math.round(speed),
-    });
-    await car.save();
+    const reading = await car.createReading({ lat, lng, speed });
 
-    // insert new reading to readings table
-    const newReading = await Readings.create({
-        plateNumber: carPN,
-        lat,
-        lng,
-        speed: Math.round(speed),
+    await res.status(200).json({
+        success: true,
+        car: {
+            plateNumber: carPN,
+            lastLat: reading.lat,
+            lastLng: reading.lng,
+            lastSpeed: reading.speed,
+            lastUpdated: reading.createdAt,
+        },
     });
-
-    await res.status(200).json({ success: true, car });
 };
 
 exports.getCars = async (req, res) => {
-    const cars = await Car.findAll();
+    const cars = await Car.findAll({
+        include: {
+            model: Readings,
+            as: "readings",
+            limit: 1,
+            order: [["createdAt", "DESC"]],
+        },
+    });
+
+    const carsWithInfo = cars.map((car) => {
+        return {
+            plateNumber: car.plateNumber,
+            lastLat: car.readings.length === 0 ? null : car.readings[0].lat,
+            lastLng: car.readings.length === 0 ? null : car.readings[0].lng,
+            lastSpeed: car.readings.length === 0 ? null : car.readings[0].speed,
+            lastUpdated:
+                car.readings.length === 0 ? null : car.readings[0].createdAt,
+        };
+    });
+
     res.status(200).json({
         success: true,
-        cars,
+        cars: carsWithInfo,
     });
 };
 
