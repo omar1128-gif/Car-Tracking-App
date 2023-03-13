@@ -10,7 +10,7 @@ const Car = ({ car, trackedPN, setTrackedPN, setCenter, setZoom, socket }) => {
         () => car.plateNumber === trackedPN,
         [car, trackedPN]
     );
-    const lastUpdated = useMemo(() => moment(car.updatedAt), [car]).fromNow();
+    const lastUpdated = useMemo(() => moment(car.lastUpdated), [car]).fromNow();
     const styles = {
         trackButton: {
             fontSize: "16px",
