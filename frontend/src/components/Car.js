@@ -5,7 +5,7 @@ import { FaCar } from "react-icons/fa";
 
 import "./Car.css";
 
-const Car = ({ car, trackedPN, setTrackedPN, setCenter, setZoom, socket }) => {
+const Car = ({ car, trackedPN, setTrackedPN, setCenter, setZoom}) => {
     const isTracked = useMemo(
         () => car.plateNumber === trackedPN,
         [car, trackedPN]
@@ -25,16 +25,12 @@ const Car = ({ car, trackedPN, setTrackedPN, setCenter, setZoom, socket }) => {
 
     const handleOnClick = () => {
         if (isTracked) {
-            socket.emit("stop-tracking", trackedPN); // stop tracking the current car because the user clicked on untrack button
             setZoom(10);
             setTrackedPN("");
         } else {
-            socket.emit("stop-tracking", trackedPN); // stop tracking the previous car
 
-            if (!car.lastLat || !car.lastLng) {
-                //Car is never updated and doesn't have latitude or longitude
+            if (!car.lastLat || !car.lastLng) {   
                 setTrackedPN(car.plateNumber);
-                socket.emit("track-car", car.plateNumber); // track the new car
             } else {
                 setCenter({
                     lat: car.lastLat,
@@ -42,7 +38,6 @@ const Car = ({ car, trackedPN, setTrackedPN, setCenter, setZoom, socket }) => {
                 });
                 setZoom(14);
                 setTrackedPN(car.plateNumber);
-                socket.emit("track-car", car.plateNumber); // track the new car
             }
         }
     };

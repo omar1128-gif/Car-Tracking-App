@@ -70,7 +70,7 @@ const CarChart = ({ socket }) => {
 
     // on car update when track button is clicked
     useEffect(() => {
-        socket.on("send-updated-car", () => {
+        socket.on("car-updated", () => {
             fetchData();
         });
     }, [socket]);

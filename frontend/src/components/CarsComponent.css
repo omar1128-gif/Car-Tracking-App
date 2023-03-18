@@ -22,6 +22,7 @@
 }
 
 .cars-component__list {
+    text-align: center;
     list-style-type: none;
     display: flex;
     flex-direction: column;
